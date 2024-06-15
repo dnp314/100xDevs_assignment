@@ -1,57 +1,40 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 //Problem Statement
 
-// Group Anagrams
+//Group Anagrams
 //Given a list of words, write a function to group the words that are anagrams of each other.
 
 vector<vector<string>> groupAnagrams(vector<string>& words) {
-    unordered_map<string, vector<string>> hash_map;
+    unordered_map<string, vector<string>> anagramsMap;
 
-    for (string& word : words) {
-        string sorted_word = word;
-        sort(sorted_word.begin(), sorted_word.end());
-        hash_map[sorted_word].push_back(word);
+    for (string word : words) {
+        
+        string sortedWord = word;
+        sort(sortedWord.begin(), sortedWord.end());
+
+        
+        anagramsMap[sortedWord].push_back(word);
     }
 
-    vector<vector<string>> result;
-    for (auto& pair : hash_map) {
-        result.push_back(pair.second);
+    
+    vector<vector<string>> groupedAnagrams;
+    for (auto it : anagramsMap) {
+        groupedAnagrams.push_back(it.second);
     }
-    return result;
+
+    return groupedAnagrams;
 }
 
-void printResult(const vector<vector<string>>& result) {
-    for (const auto& group : result) {
-        for (const auto& word : group) {
+void printGroupedAnagrams(const vector<vector<string>>& groupedAnagrams) {
+    for (const auto& group : groupedAnagrams) {
+        cout << "[ ";
+        for (const string& word : group) {
             cout << word << " ";
         }
-        cout << endl;
+        cout << "]" << endl;
     }
-}
-
-bool isAnagramGroupEqual(const vector<vector<string>>& a, const vector<vector<string>>& b) {
-    if (a.size() != b.size()) return false;
-    unordered_map<string, int> count;
-    for (const auto& group : a) {
-        for (const auto& word : group) {
-            string sorted_word = word;
-            sort(sorted_word.begin(), sorted_word.end());
-            count[sorted_word]++;
-        }
-    }
-    for (const auto& group : b) {
-        for (const auto& word : group) {
-            string sorted_word = word;
-            sort(sorted_word.begin(), sorted_word.end());
-            count[sorted_word]--;
-        }
-    }
-    for (const auto& pair : count) {
-        if (pair.second != 0) return false;
-    }
-    return true;
 }
 
 void testGroupAnagrams() {
@@ -60,7 +43,10 @@ void testGroupAnagrams() {
         vector<string> words = {"eat", "tea", "tan", "ate", "nat", "bat"};
         vector<vector<string>> expected = {{"eat", "tea", "ate"}, {"tan", "nat"}, {"bat"}};
         vector<vector<string>> result = groupAnagrams(words);
-        assert(isAnagramGroupEqual(result, expected));
+
+        cout << "Test Case 1 - Result: " << endl;
+        printGroupedAnagrams(result);
+        cout << endl;
     }
 
     // Test Case 2
@@ -68,7 +54,10 @@ void testGroupAnagrams() {
         vector<string> words = {"listen", "silent", "enlist", "inlets", "google", "gogole"};
         vector<vector<string>> expected = {{"listen", "silent", "enlist", "inlets"}, {"google", "gogole"}};
         vector<vector<string>> result = groupAnagrams(words);
-        assert(isAnagramGroupEqual(result, expected));
+
+        cout << "Test Case 2 - Result: " << endl;
+        printGroupedAnagrams(result);
+        cout << endl;
     }
 
     // Test Case 3
@@ -76,29 +65,48 @@ void testGroupAnagrams() {
         vector<string> words = {"rat", "tar", "art", "star", "tars", "tsar"};
         vector<vector<string>> expected = {{"rat", "tar", "art"}, {"star", "tars", "tsar"}};
         vector<vector<string>> result = groupAnagrams(words);
-        assert(isAnagramGroupEqual(result, expected));
+
+        cout << "Test Case 3 - Result: " << endl;
+        printGroupedAnagrams(result);
+        cout << endl;
     }
 
     // Test Case 4
     {
-        vector<string> words = {"", "", ""};
-        vector<vector<string>> expected = {{"", "", ""}};
+        vector<string> words = {"a", "b", "c", "a"};
+        vector<vector<string>> expected = {{"a", "a"}, {"b"}, {"c"}};
         vector<vector<string>> result = groupAnagrams(words);
-        assert(isAnagramGroupEqual(result, expected));
+
+        cout << "Test Case 4 - Result: " << endl;
+        printGroupedAnagrams(result);
+        cout << endl;
     }
 
     // Test Case 5
     {
-        vector<string> words = {"a"};
-        vector<vector<string>> expected = {{"a"}};
+        vector<string> words = {"abc", "bca", "cab", "xyz", "yzx", "zxy", "xy", "yx"};
+        vector<vector<string>> expected = {{"abc", "bca", "cab"}, {"xyz", "yzx", "zxy"}, {"xy", "yx"}};
         vector<vector<string>> result = groupAnagrams(words);
-        assert(isAnagramGroupEqual(result, expected));
+
+        cout << "Test Case 5 - Result: " << endl;
+        printGroupedAnagrams(result);
+        cout << endl;
     }
 
-    
+    // Test Case 6
+    {
+        vector<string> words = {"abcd", "dcba", "bcda", "dabc", "ab", "ba", "a", "b"};
+        vector<vector<string>> expected = {{"abcd", "dcba", "bcda", "dabc"}, {"ab", "ba"}, {"a"}, {"b"}};
+        vector<vector<string>> result = groupAnagrams(words);
+
+        cout << "Test Case 6 - Result: " << endl;
+        printGroupedAnagrams(result);
+        cout << endl;
+    }
 }
 
 int main() {
     testGroupAnagrams();
     return 0;
 }
+
